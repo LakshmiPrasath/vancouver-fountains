@@ -1,0 +1,32 @@
+doctype html
+html
+  head
+    meta(name="viewport", content="initial-scale=1.0, width=device-width")
+    title= title
+    script(src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js")
+    script(src="http://www.google.com/jsapi")
+    script(src="/js/script.js")
+    script
+      | google.load('maps', '3', {
+      |   other_params: 'sensor=false'
+      | });
+      | google.setOnLoadCallback(ff.init);
+      | google.load("jquery", "1");
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css')
+  body
+    div.navbar.navbar-default.navbar-static-top(role="navigation")
+      div.container
+        div.navbar-header
+          a.navbar-brand
+            = title
+
+    block content
+
+    link(rel='stylesheet', href='/css/style.css')
+    script
+      | $(window).resize(function () {
+      |   var h = $(window).height(),
+      |        offsetTop = 60; // Calculate the top offset
+      |   $('#map').css('height', (h - offsetTop));
+      | }).resize();
+

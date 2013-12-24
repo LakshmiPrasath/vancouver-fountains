@@ -1,0 +1,43 @@
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 100%;
+}
+
+#markerlist {
+  overflow-y: scroll;
+  max-height: 380px;
+  margin-top: 20px;
+}
+
+.info {
+  width: 200px;
+}
+
+.info img {
+  border: 0;
+}
+
+.info-body {
+  overflow: hidden;
+}
+
+.info-img {
+  height: 220px;
+  width: 200px;
+}
+
+/**********************
+ * Override BootStrap
+***********************/
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}

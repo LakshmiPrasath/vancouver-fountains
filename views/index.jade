@@ -1,0 +1,19 @@
+extends layout
+
+block content
+
+  div.row
+    div#panel.col-md-4
+      div.panel.panel-primary
+        div.panel-heading.text-center
+          h3.panel-title Find Your Fountains
+        div.panel-body
+          p.lead Time taken: 
+            span#timetaken
+
+          a#usegmm.btn.btn-primary Find All
+
+          div#markerlist.list-group
+
+    div.col-md-8
+      div#map
