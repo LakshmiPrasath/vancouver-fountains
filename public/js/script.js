@@ -8,7 +8,7 @@ function elem(element) {
 }
 
 var ff = {};
-var data2 = {};
+var data = {};
 var vancouverLat = 49.26123;
 var vancouverLng = -123.11393;
 
@@ -45,8 +45,8 @@ ff.showMarkers = function() {
     ff.markerClusterer.clearMarkers();
   }
 
-  if (data2.fountains)
-    ff.fountains = data2.fountains;
+  if (data.fountains)
+    ff.fountains = data.fountains;
 
   var panel = elem('markerlist');
   
@@ -124,7 +124,7 @@ ff.clear = function() {
 ff.change = function() {
   ff.clear();
   $.get('/api', {})
-    .done(function(fountains) { data2 = fountains; ff.showMarkers(); });
+    .done(function(fountains) { data = fountains; ff.showMarkers(); });
 };
 
 ff.time = function() {
