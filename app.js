@@ -9,8 +9,6 @@ var api = require('./routes/api');
 var http = require('http');
 var path = require('path');
 
-var gm = require('googlemaps');
-var util = require('util');
 
 var app = express();
 
@@ -25,6 +23,8 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(express.urlencoded());
 
 // development only
 if ('development' == app.get('env')) {
@@ -33,7 +33,10 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 
+// Get all fountains
 app.get('/api', api.getFountains);
+// Search for nearby fountains
+app.post('/api/search', api.search);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

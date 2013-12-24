@@ -5,7 +5,7 @@ html
     title= title
     script(src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js")
     script(src="http://www.google.com/jsapi")
-    script(src="/js/script.js")
+    script(src="/js/gm.js")
     script
       | google.load('maps', '3', {
       |   other_params: 'sensor=false'
@@ -13,6 +13,7 @@ html
       | google.setOnLoadCallback(ff.init);
       | google.load("jquery", "1");
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css')
+    script(src="/js/ui.js")
   body
     div.navbar.navbar-default.navbar-static-top(role="navigation")
       div.container

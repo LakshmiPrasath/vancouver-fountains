@@ -8,7 +8,7 @@ function elem(element) {
 }
 
 var ff = {};
-var data = {};
+var data = { count: 0, fountains: [] };
 var vancouverLat = 49.26123;
 var vancouverLng = -123.11393;
 
@@ -19,9 +19,9 @@ ff.markers = [];
 ff.infoWindow = null;
 
 ff.init = function() {
-  var latlng = new google.maps.LatLng(vancouverLat, vancouverLng);
+  var latlng = new google.maps.LatLng(data.viewLat || vancouverLat, data.viewLng || vancouverLng);
   var options = {
-    'zoom': 12,
+    'zoom': data.zoom || 12,
     'center': latlng,
     'mapTypeId': google.maps.MapTypeId.ROADMAP
   };
@@ -39,25 +39,20 @@ ff.init = function() {
 ff.showMarkers = function() {
   ff.markers = [];
 
-  var type = 0;
-
   if (ff.markerClusterer) {
     ff.markerClusterer.clearMarkers();
   }
 
-  if (data.fountains)
-    ff.fountains = data.fountains;
+  ff.fountains = data.fountains;
 
   var panel = elem('markerlist');
-  
-  if (ff.fountains.length > 0) {
-    panel.innerHTML = '<a class="list-group-item text-center">' + 
+
+  if (data.count > 0) {
+    panel.innerHTML = '<a class="list-group-item text-center">' +
       '<span class="badge">' + ff.fountains.length + '</span><strong>Fountains</strong></a>';
   }
 
-  var numMarkers = 1;
-
-  for (var i = 0; i < ff.fountains.length; i++) {
+  for (var i = 0; i < data.count; i++) {
     var fountain = ff.fountains[i];
     var titleText = fountain.name;
     if (titleText == '') {
@@ -115,7 +110,7 @@ ff.markerClickFunction = function(fountain, latlng) {
 };
 
 ff.clear = function() {
-  elem('timetaken').innerHTML = 'cleaning...';
+  elem('timetaken').innerHTML = 'processing...';
   for (var i = 0, marker; marker = ff.markers[i]; i++) {
     marker.setMap(null);
   }
