@@ -114,6 +114,10 @@ ff.clear = function() {
   for (var i = 0, marker; marker = ff.markers[i]; i++) {
     marker.setMap(null);
   }
+  // Clear previous search result
+  elem('search-result').innerHTML = '';
+  elem('search-input').value = '';
+  $('#search-form .form-group').removeClass('has-error');
 };
 
 ff.change = function() {

@@ -51,8 +51,9 @@ exports.search = function(req, res) {
     if (err) throw err;
 
     // Take the last result, for now
-    var lat = result.results[result.results.length - 1].geometry.location.lat || null;
-    var lng = result.results[result.results.length - 1].geometry.location.lng || null;
+    var loc = result.results[result.results.length - 1];
+    var lat = loc.geometry.location.lat || null;
+    var lng = loc.geometry.location.lng || null;
 
     if (lat && lng) {
 
@@ -80,6 +81,7 @@ exports.search = function(req, res) {
           data.viewLat = lat;
           data.viewLng = lng;
           data.zoom = 12;
+          data.formatted_address = loc.formatted_address;
           res.send(data);
 
         });

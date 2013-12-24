@@ -13,13 +13,14 @@ block content
 
           form#search-form(role="form")
             div.form-group
-              label(for="searchInput") Search
-              input.form-control(type="text", name="location", placeholder="Downtown")
-              span.help-block Enter an address, location or intersection to find 20 closest drinking fountains
+              label(for="searchInput") Search within Vancouver, BC
+              input#search-input.form-control(type="text", name="location", placeholder="Downtown")
+              span.help-block Enter an address, location or intersection to find 20 closest drinking fountains within 5 km
               button.btn.btn-primary(type="submit", style="margin-right: 10px") Find
               span OR
               button#usegmm.btn.btn-primary(type="button", style="margin-left: 10px") Find All
 
+          div#search-result
           div#markerlist.list-group
 
     div.col-md-8
