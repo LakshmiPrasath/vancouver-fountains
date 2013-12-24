@@ -6,6 +6,7 @@ $(document).ready(function() {
   $("form#search-form").submit(function(e) {
     e.preventDefault();
     var $this = $(this);
+    elem('timetaken').innerHTML = 'processing...';
     if ($('#search-input').val().trim() != '') {
       $.post(
         '/api/search',
