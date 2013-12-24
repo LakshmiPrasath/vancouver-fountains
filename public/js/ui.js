@@ -12,6 +12,7 @@ $(document).ready(function() {
         $this.serialize(),
         function(fountains) {
           data = fountains;
+          ff.clear();
           ff.init();
           $('#search-result').html('<strong>Found address: </strong>' + data.formatted_address);
         },
