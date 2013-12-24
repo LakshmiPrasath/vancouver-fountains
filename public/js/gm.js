@@ -123,7 +123,7 @@ ff.clear = function() {
 ff.change = function() {
   ff.clear();
   $.get('/api', {})
-    .done(function(fountains) { data = fountains; ff.showMarkers(); });
+    .done(function(fountains) { data = fountains; ff.init(); });
 };
 
 ff.time = function() {
