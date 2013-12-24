@@ -5,10 +5,10 @@
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'root',
-  database : 'fountains'
+  host     : process.env.DATABASE_HOST || 'localhost',
+  user     : process.env.DATABASE_USER || 'root',
+  password : process.env.DATABASE_PASSWORD || 'root',
+  database : process.env.DATABASE_DB || 'fountains'
 });
 
 exports.getFountains = function(req, res) {
