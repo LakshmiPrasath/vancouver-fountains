@@ -110,6 +110,7 @@ ff.markerClickFunction = function(fountain, latlng) {
     ff.infoWindow.setContent(infoHtml);
     ff.infoWindow.setPosition(latlng);
     ff.infoWindow.open(ff.map);
+    location.href = "#map";
   };
 };
 
