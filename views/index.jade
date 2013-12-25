@@ -13,14 +13,15 @@ block content
 
           form#search-form(role="form")
             div.form-group
-              label(for="searchInput") Search within Vancouver, BC
-              div.input-group.add-on
+              label(for="search-input") Search
+              div.input-group
                 input#search-input.form-control(type="text", name="location", placeholder="Downtown")
-                div.input-group-btn
+                span.input-group-btn
                   button.btn.btn-default(type="submit")
                     i.glyphicon.glyphicon-search
 
               span.help-block Enter an address, location or intersection to find 20 closest drinking fountains within 5 km
+
               strong OR
               button#usegmm.btn.btn-primary(type="button", style="margin-left: 10px") Find All
 
