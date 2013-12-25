@@ -23,6 +23,19 @@ html
 
     block content
 
+    footer(role="contentinfo")
+      hr
+      div.container
+        div.row
+          ul.list-inline.text-center
+            li &copy; #{new Date().getFullYear()} 
+              a(href="http://baopham.herokuapp.com") Bao Pham
+            li
+              i.glyphicon.glyphicon-star
+              |  Data provided by 
+              a(href="http://data.vancouver.ca/datacatalogue/drinkingFountains.htm")
+                | City of Vancouver
+
     link(rel='stylesheet', href='/css/style.css')
     script(src="/js/ui.js")
     script
