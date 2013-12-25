@@ -7,16 +7,13 @@ $(document).ready(function() {
     e.preventDefault();
     var $this = $(this);
     if ($('#search-input').val().trim() != '') {
-      elem('timetaken').innerHTML = 'processing...';
+
+      $('#timetaken').html = 'processing...';
+
       $.post(
-        '/api/search',
+        '/api/geom',
         $this.serialize(),
-        function(fountains) {
-          data = fountains;
-          ff.clear();
-          ff.init();
-          $('#search-result').html('<strong>Found address: </strong>' + data.formatted_address);
-        },
+        searchCallback,
         "json"
       );
     }
@@ -24,4 +21,38 @@ $(document).ready(function() {
       $('#search-form .form-group').addClass('has-error');
     }
   });
+
+  var searchCallback = function(addresses) {
+    if (addresses.length == 0) {
+      $('#timetaken').html = '';
+      $('#search-result').html('<p class="lead text-danger">Woops, no fountains found!</p>');
+    }
+    else {
+      var $list = $('#search-result-modal').find('.list-group');
+
+      for (var i = 0; i < addresses.length; i++) {
+        $list.append('<a class="list-group-item" data-lat="'
+                     + addresses[i].geometry.location.lat + '" '
+                     + 'data-lng="' + addresses[i].geometry.location.lng + '"'
+                     + '>' + addresses[i].formatted_address + '</a>');
+      }
+
+      $('#search-result-modal').modal('show');
+
+      $('.list-group-item').click(function() {
+        ff.clear();
+        $.get(
+          '/api/nearby/' + $(this).attr('data-lat') + '/' + $(this).attr('data-lng'),
+          { formatted_address : $(this).text() }
+          )
+            .done(function(fountains) { data = fountains; ff.init(); });
+
+        $('#search-result').html('<strong>Selected address: </strong>'
+                                 + '<p>' + $(this).text() + '</p>');
+
+        $('#search-result-modal').modal('hide');
+
+      })
+    }
+  }
 });

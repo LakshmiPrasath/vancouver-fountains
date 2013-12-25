@@ -35,8 +35,10 @@ app.get('/', routes.index);
 
 // Get all fountains
 app.get('/api', api.getFountains);
-// Search for nearby fountains
-app.post('/api/search', api.search);
+// Get formatted addresses
+app.post('/api/geom', api.geom);
+// Query for nearby fountains
+app.get('/api/nearby/:lat/:lng', api.search);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

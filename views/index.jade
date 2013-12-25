@@ -2,6 +2,16 @@ extends layout
 
 block content
 
+  div.modal.fade#search-result-modal(tabindex="-1", role="dialog", aira-labelledby="searchModalLabel", aria-hidden="true")
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
+          h4.modal-title#searchModalLabel We found these addresses
+        div.modal-body
+          p.lead Please select one:
+          div.list-group
+
   div.row
     div#panel.col-md-4
       div.panel.panel-primary
