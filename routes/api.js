@@ -45,7 +45,6 @@ exports.geom = function(req, res) {
 
     if (err) throw err;
 
-    console.log(require('util').inspect(result.results, false, null));
     res.send(result.results);
 
   });
