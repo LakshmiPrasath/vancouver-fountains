@@ -34,14 +34,29 @@ body {
   width: 200px;
 }
 
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 60px;
+}
+
+#footer .list-inline > li {
+  padding-right: 0;
+}
+
 /**********************
  * Override BootStrap
 ***********************/
 .row {
   margin-left: 0;
   margin-right: 0;
-}
-
-footer .list-inline > li {
-  padding-right: 0;
 }
