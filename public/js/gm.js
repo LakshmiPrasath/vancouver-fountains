@@ -8,7 +8,7 @@ function elem(element) {
 }
 
 var ff = {};
-var data = { count: null, fountains: [] };
+var data = { count: null, fountains: [], searchPos: {} };
 var vancouverLat = 49.26123;
 var vancouverLng = -123.11393;
 
@@ -19,7 +19,7 @@ ff.markers = [];
 ff.infoWindow = null;
 
 ff.init = function() {
-  var latlng = new google.maps.LatLng(data.viewLat || vancouverLat, data.viewLng || vancouverLng);
+  var latlng = new google.maps.LatLng(data.searchPos.lat || vancouverLat, data.searchPos.lng || vancouverLng);
   var options = {
     'zoom': data.zoom || 12,
     'center': latlng,
@@ -53,6 +53,9 @@ ff.showMarkers = function() {
     panel.innerHTML = '';
   }
 
+  var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=' +
+  'FFFFFF,008CFF,000000&ext=.png';
+
   for (var i = 0; i < data.count; i++) {
     var fountain = ff.fountains[i];
     var titleText = fountain.name;
@@ -70,20 +73,39 @@ ff.showMarkers = function() {
     var latLng = new google.maps.LatLng(fountain.lat,
         fountain.lng);
 
-    var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=' +
-        'FFFFFF,008CFF,000000&ext=.png';
     var markerImage = new google.maps.MarkerImage(imageUrl,
         new google.maps.Size(24, 32));
 
     var marker = new google.maps.Marker({
       'position': latLng,
-      'icon': markerImage
+      'icon': markerImage,
+      animation: google.maps.Animation.DROP
     });
 
     var fn = ff.markerClickFunction(fountain, latLng);
     google.maps.event.addListener(marker, 'click', fn);
     google.maps.event.addDomListener(title, 'click', fn);
     ff.markers.push(marker);
+  }
+
+  // If the user searches based on a particular address,
+  // show this address with a different marker
+  if (data.searchPos && data.searchPos.lat && data.searchPos.lng) {
+
+    var imageUrl = 'http://maps.google.com/mapfiles/marker.png';
+    var markerImage = new google.maps.MarkerImage(imageUrl,
+        new google.maps.Size(24, 32));
+
+    var latLng = new google.maps.LatLng(data.searchPos.lat, data.searchPos.lng);
+    var marker = new google.maps.Marker({
+      position: latLng,
+      map: ff.map,
+      animation: google.maps.Animation.BOUNCE
+    });
+
+    var fn = ff.markerClickFunction(data.searchPos, latLng);
+    google.maps.event.addListener(marker, 'click', fn);
+    google.maps.event.addDomListener(elem('search-result'), 'click', fn);
   }
 
   window.setTimeout(ff.drawMarker, 0);
@@ -98,7 +120,7 @@ ff.markerClickFunction = function(fountain, latlng) {
       e.preventDefault();
     }
     var title = fountain.name;
-    var description = 'Maintainer: ' + fountain.maintainer;
+    var description = (fountain.maintainer) ? 'Maintainer: ' + fountain.maintainer : '';
 
     var infoHtml = '<div class="info"><h4>' + title +
       '</h4><div class="info-body">' + description + '</div></div>';
@@ -138,4 +160,4 @@ ff.drawMarker = function() {
 
 ff.updateStatus = function(status) {
   elem('timetaken').innerHTML = status;
-}
+};

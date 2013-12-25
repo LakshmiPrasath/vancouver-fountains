@@ -30,11 +30,13 @@ $(document).ready(function() {
     }
     else if (addresses.length == 1) {
       ff.clear();
-      $.get(
-          '/api/nearby/' + addresses[0].geometry.location.lat + '/' + addresses[0].geometry.location.lng,
-          { formatted_address :  addresses[0].formatted_address }
-        )
-        .done(function(fountains) { data = fountains; ff.init(); });
+
+      showNearby(
+        addresses[0].geometry.location.lat,
+        addresses[0].geometry.location.lng,
+        addresses[0].formatted_address,
+        addresses[0].address_components[0].long_name
+      );
 
       updateResult(addresses[0].formatted_address, 0);
     }
@@ -52,6 +54,7 @@ $(document).ready(function() {
         $list.append('<a class="list-group-item" data-lat="'
                      + addresses[i].geometry.location.lat + '" '
                      + 'data-lng="' + addresses[i].geometry.location.lng + '"'
+                     + 'data-longname="' + addresses[i].address_components[0].long_name + '"'
                      + '>' + addresses[i].formatted_address + '</a>');
       }
 
@@ -59,14 +62,13 @@ $(document).ready(function() {
 
       $('.list-group-item').click(function() {
         ff.clear();
-        $.get(
-            '/api/nearby/' + $(this).attr('data-lat') + '/' + $(this).attr('data-lng'),
-            { formatted_address : $(this).text() }
-          )
-          .done(function(fountains) {
-            data = fountains;
-            ff.init();
-          });
+
+        showNearby(
+          $(this).attr('data-lat'),
+          $(this).attr('data-lng'),
+          $(this).text(),
+          $(this).attr('data-longname')
+        );
 
         updateResult($(this).text(), 1);
 
@@ -74,16 +76,33 @@ $(document).ready(function() {
 
       });
     }
-  }
+  };
 
   var updateResult = function(address, selected) {
     if (selected === 1) {
-      $('#search-result').html('<strong>Selected address: </strong>'
-                             + '<p>' + address + '</p>');
+      $('#search-result').html(
+        '<strong>Selected address: </strong>'
+        + '<img src="http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=0.7"/>'
+        + '<a> ' + address + '</a>'
+      );
     }
     else {
-      $('#search-result').html('<strong>Found address: </strong>'
-                             + '<p>' + address + '</p>');
+      $('#search-result').html(
+        '<strong>Found address: </strong>'
+        + '<img src="http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=0.7"/>'
+        + '<a> ' + address + '</a>'
+      );
     }
-  }
+  };
+
+  var showNearby = function(lat, lng, formattedAddress, longName) {
+    $.get(
+      '/api/nearby/' + lat + '/' + lng,
+      {
+        formatted_address : formattedAddress,
+        long_name: longName
+      }
+    )
+    .done(function(fountains) { data = fountains; ff.init(); });
+  };
 });

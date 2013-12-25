@@ -15,7 +15,7 @@ var gm = require('googlemaps');
 var defaultLocation = 'Vancouver, BC, Canada';
 
 exports.getFountains = function(req, res) {
-  var data = { count: 0, fountains: [] },
+  var data = { count: 0, fountains: [], searchPos: {} },
       prev_title = '',
       query = 'SELECT X(geom) AS lat, Y(geom) AS lng, name, id, maintainer FROM fountains ORDER BY name';
 
@@ -45,6 +45,7 @@ exports.geom = function(req, res) {
 
     if (err) throw err;
 
+    console.log(require('util').inspect(result.results, false, null));
     res.send(result.results);
 
   });
@@ -53,10 +54,16 @@ exports.geom = function(req, res) {
 exports.search = function(req, res) {
   var lat = req.param('lat'),
       lng = req.param('lng'),
-      data = { count: 0, fountains: [] },
+      data = { count: 0, fountains: [], searchPos: {} },
       prev_title = '';
 
-  if (inrange(-90, lat, 90) && inrange(-180, lng, 180) && req.query.formatted_address) {
+  if (inrange(-90, lat, 90) && inrange(-180, lng, 180)) {
+
+    data.searchPos = {
+      lat: lat,
+      lng: lng,
+      name: req.query.long_name || ''
+    };
 
     // Haversine formula to find the closest 20 locations within a radius of 5 km
     query = 'SELECT id, name, maintainer, X(geom) as lat, Y(geom) as lng, ( 6371 * acos( cos( radians(?) ) * cos( radians( X(geom) ) )'
@@ -74,10 +81,8 @@ exports.search = function(req, res) {
         }
 
         data.count = rows.length;
-        data.viewLat = lat;
-        data.viewLng = lng;
         data.zoom = 12;
-        data.formatted_address = req.query.formatted_address;
+        data.formatted_address = req.query.formatted_address || '';
         res.send(data);
 
       });
