@@ -29,7 +29,7 @@ ff.init = function() {
   ff.map = new google.maps.Map(elem('map'), options);
 
   var useGmm = document.getElementById('usegmm');
-  google.maps.event.addDomListener(useGmm, 'click', ff.change);
+  google.maps.event.addDomListener(useGmm, 'click', ff.findAll);
 
   ff.infoWindow = new google.maps.InfoWindow();
 
@@ -87,7 +87,7 @@ ff.showMarkers = function() {
     ff.markers.push(marker);
   }
 
-  window.setTimeout(ff.time, 0);
+  window.setTimeout(ff.drawMarker, 0);
 };
 
 ff.markerClickFunction = function(fountain, latlng) {
@@ -112,7 +112,6 @@ ff.markerClickFunction = function(fountain, latlng) {
 };
 
 ff.clear = function() {
-  elem('timetaken').innerHTML = 'processing...';
   for (var i = 0, marker; marker = ff.markers[i]; i++) {
     marker.setMap(null);
   }
@@ -122,17 +121,22 @@ ff.clear = function() {
   $('#search-form .form-group').removeClass('has-error');
 };
 
-ff.change = function() {
+ff.findAll = function() {
+  ff.updateStatus('processing...');
   ff.clear();
   $.get('/api', {})
-    .done(function(fountains) { data = fountains; ff.init(); });
+    .done(function(fountains) {
+      data = fountains;
+      ff.init();
+    });
 };
 
-ff.time = function() {
-  elem('timetaken').innerHTML = 'timing...';
-  var start = new Date();
+ff.drawMarker = function() {
   ff.markerClusterer = new MarkerClusterer(ff.map, ff.markers);
-
-  var end = new Date();
-  elem('timetaken').innerHTML = end - start + ' ms';
+  // Done
+  ff.updateStatus('');
 };
+
+ff.updateStatus = function(status) {
+  elem('timetaken').innerHTML = status;
+}

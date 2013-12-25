@@ -3,12 +3,13 @@
  */
 
 $(document).ready(function() {
+
   $("form#search-form").submit(function(e) {
     e.preventDefault();
     var $this = $(this);
     if ($('#search-input').val().trim() != '') {
 
-      $('#timetaken').html = 'processing...';
+      ff.updateStatus('processing...');
 
       $.post(
         '/api/geom',
@@ -24,9 +25,20 @@ $(document).ready(function() {
 
   var searchCallback = function(addresses) {
     if (addresses.length == 0) {
-      $('#timetaken').html = '';
+      ff.updateStatus('');
       $('#search-result').html('<p class="lead text-danger">Woops, no fountains found!</p>');
     }
+    else if (addresses.length == 1) {
+      ff.clear();
+      $.get(
+          '/api/nearby/' + addresses[0].geometry.location.lat + '/' + addresses[0].geometry.location.lng,
+          { formatted_address :  addresses[0].formatted_address }
+        )
+        .done(function(fountains) { data = fountains; ff.init(); });
+
+      updateResult(addresses[0].formatted_address, 0);
+    }
+    // Show a modal if there's more than one addresses
     else {
       var $modal = $('#search-result-modal');
       var $list = $modal.find('.list-group');
@@ -48,18 +60,30 @@ $(document).ready(function() {
       $('.list-group-item').click(function() {
         ff.clear();
         $.get(
-          '/api/nearby/' + $(this).attr('data-lat') + '/' + $(this).attr('data-lng'),
-          { formatted_address : $(this).text() }
+            '/api/nearby/' + $(this).attr('data-lat') + '/' + $(this).attr('data-lng'),
+            { formatted_address : $(this).text() }
           )
-            .done(function(fountains) { data = fountains; ff.init(); });
+          .done(function(fountains) {
+            data = fountains;
+            ff.init();
+          });
 
-        $('#search-result').html('<strong>Selected address: </strong>'
-                                 + '<p>' + $(this).text() + '</p>');
+        updateResult($(this).text(), 1);
 
         $modal.modal('hide');
 
-      })
+      });
+    }
+  }
 
+  var updateResult = function(address, selected) {
+    if (selected === 1) {
+      $('#search-result').html('<strong>Selected address: </strong>'
+                             + '<p>' + address + '</p>');
+    }
+    else {
+      $('#search-result').html('<strong>Found address: </strong>'
+                             + '<p>' + address + '</p>');
     }
   }
 });
