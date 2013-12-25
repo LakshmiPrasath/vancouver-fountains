@@ -28,8 +28,7 @@ ff.init = function() {
 
   ff.map = new google.maps.Map(elem('map'), options);
 
-  var useGmm = document.getElementById('usegmm');
-  google.maps.event.addDomListener(useGmm, 'click', ff.findAll);
+  google.maps.event.addDomListener(elem('find-all'), 'click', ff.findAll);
 
   ff.infoWindow = new google.maps.InfoWindow();
 
