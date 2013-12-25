@@ -27,9 +27,7 @@ html
     script(src="/js/ui.js")
     script
       | $(window).resize(function () {
-      |   var h = $(window).height(),
-      |        offsetTop = 60; // Calculate the top offset
-      |   $('#map').css('height', (h - offsetTop));
+      |   $('#map').css('height', $(window).height());
       | }).resize();
     script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js")
 
