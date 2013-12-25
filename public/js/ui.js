@@ -28,7 +28,13 @@ $(document).ready(function() {
       $('#search-result').html('<p class="lead text-danger">Woops, no fountains found!</p>');
     }
     else {
-      var $list = $('#search-result-modal').find('.list-group');
+      var $modal = $('#search-result-modal');
+      var $list = $modal.find('.list-group');
+
+      // Clear the list when modal is closed
+      $modal.on('hidden.bs.modal', function(e) {
+        $list.html('');
+      });
 
       for (var i = 0; i < addresses.length; i++) {
         $list.append('<a class="list-group-item" data-lat="'
@@ -37,7 +43,7 @@ $(document).ready(function() {
                      + '>' + addresses[i].formatted_address + '</a>');
       }
 
-      $('#search-result-modal').modal('show');
+      $modal.modal('show');
 
       $('.list-group-item').click(function() {
         ff.clear();
@@ -50,9 +56,10 @@ $(document).ready(function() {
         $('#search-result').html('<strong>Selected address: </strong>'
                                  + '<p>' + $(this).text() + '</p>');
 
-        $('#search-result-modal').modal('hide');
+        $modal.modal('hide');
 
       })
+
     }
   }
 });
