@@ -61,7 +61,7 @@ exports.search = function(req, res) {
     // Haversine formula to find the closest 20 locations within a radius of 5 km
     query = 'SELECT id, name, maintainer, X(geom) as lat, Y(geom) as lng, ( 6371 * acos( cos( radians(?) ) * cos( radians( X(geom) ) )'
     + ' * cos( radians( Y(geom) ) - radians(?) ) + sin( radians(?) ) * sin( radians( X(geom) ) ) ) )'
-    + ' AS distance FROM fountains HAVING distance < 5 ORDER BY name LIMIT 0, 20';
+    + ' AS distance FROM fountains HAVING distance < 5 ORDER BY distance LIMIT 0, 20';
 
     pool.getConnection(function(err, connection) {
       connection.query(query, [lat, lng, lat], function(err, rows, fields) {
@@ -70,11 +70,6 @@ exports.search = function(req, res) {
         connection.release();
 
         for (var i = 0; i < rows.length; i++) {
-          // Some formatting with the name, some fountains have the same name,
-          // so we append a counter at the end of the name
-          c = prev_title === rows[i].name ? c + 1 : 0;
-          prev_title = rows[i].name;
-          rows[i].name += c >= 1 ? ' ' + c : '';
           data.fountains.push(rows[i]);
         }
 
