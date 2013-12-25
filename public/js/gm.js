@@ -8,7 +8,7 @@ function elem(element) {
 }
 
 var ff = {};
-var data = { count: 0, fountains: [] };
+var data = { count: null, fountains: [] };
 var vancouverLat = 49.26123;
 var vancouverLng = -123.11393;
 
@@ -47,9 +47,11 @@ ff.showMarkers = function() {
 
   var panel = elem('markerlist');
 
-  if (data.count > 0) {
+  if (data.count !== null) {
     panel.innerHTML = '<a class="list-group-item text-center">' +
       '<span class="badge">' + ff.fountains.length + '</span><strong>Fountains</strong></a>';
+  } else {
+    panel.innerHTML = '';
   }
 
   for (var i = 0; i < data.count; i++) {
