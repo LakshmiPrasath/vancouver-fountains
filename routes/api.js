@@ -51,7 +51,7 @@ exports.geom = function(req, res) {
   });
 }
 
-exports.search = function(req, res) {
+exports.search = function(req, res, next) {
   var lat = req.param('lat'),
       lng = req.param('lng'),
       data = { count: 0, fountains: [], searchPos: {} },
@@ -89,7 +89,10 @@ exports.search = function(req, res) {
     });
   }
   else {
-    res.send(data);
+    // Trigger error
+    var err = new Error('not allowed!');
+    err.status = 403;
+    next(err);
   }
 }
 
