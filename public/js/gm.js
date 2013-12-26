@@ -147,7 +147,7 @@ ff.clear = function() {
 ff.findAll = function() {
   ff.updateStatus('processing...');
   ff.clear();
-  $.get('/api', {})
+  $.get('/api/all', {})
     .done(function(fountains) {
       data = fountains;
       ff.init();

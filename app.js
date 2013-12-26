@@ -34,10 +34,9 @@ if (silent) {
 }
 
 // Routes
-
 app.get('/', routes.index);
 // Get all fountains
-app.get('/api', api.getFountains);
+app.get('/api/all', api.getFountains);
 // Get addresses and geometry info
 app.post('/api/geom', api.geom);
 // Query for nearby fountains
