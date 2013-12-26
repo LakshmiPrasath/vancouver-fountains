@@ -31,6 +31,8 @@ $(document).ready(function() {
     else if (addresses.length == 1) {
       ff.clear();
 
+      updateSearchResult(addresses[0].formatted_address, 0);
+
       showNearby(
         addresses[0].geometry.location.lat,
         addresses[0].geometry.location.lng,
@@ -38,7 +40,6 @@ $(document).ready(function() {
         addresses[0].address_components[0].long_name
       );
 
-      updateResult(addresses[0].formatted_address, 0);
     }
     // Show a modal if there's more than one addresses
     else {
@@ -63,6 +64,8 @@ $(document).ready(function() {
       $('.list-group-item').click(function() {
         ff.clear();
 
+        updateSearchResult($(this).text(), 1);
+
         showNearby(
           $(this).attr('data-lat'),
           $(this).attr('data-lng'),
@@ -70,29 +73,29 @@ $(document).ready(function() {
           $(this).attr('data-longname')
         );
 
-        updateResult($(this).text(), 1);
-
         $modal.modal('hide');
 
       });
     }
   };
 
-  var updateResult = function(address, selected) {
+  // Make sure we call updateSearchResult() before showNearby() !
+  var updateSearchResult = function(address, selected) {
+    var html = '';
     if (selected === 1) {
-      $('#search-result').html(
-        '<strong>Selected address: </strong>'
-        + '<img src="http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=0.7"/>'
-        + '<a> ' + address + '</a>'
-      );
+      html = '<strong>Selected address: </strong>'
+	      + '<img src="http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=0.7"/>'
+	      + '<a> ' + address + '</a>'
     }
     else {
-      $('#search-result').html(
-        '<strong>Found address: </strong>'
-        + '<img src="http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=0.7"/>'
-        + '<a> ' + address + '</a>'
-      );
+      html = '<strong>Found address: </strong>'
+	      + '<img src="http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=0.7"/>'
+	      + '<a> ' + address + '</a>'
     }
+
+    // Save this so we can display it if refreshed
+    ff.data.searchResultHTML = html;
+
   };
 
   var showNearby = function(lat, lng, formattedAddress, longName) {
@@ -103,6 +106,10 @@ $(document).ready(function() {
         long_name: longName
       }
     )
-    .done(function(fountains) { data = fountains; ff.init(); });
+    .done(function(fountains) {
+      fountains.searchResultHTML = ff.data.searchResultHTML;
+      ff.setData(fountains);
+      ff.init();
+    });
   };
 });

@@ -3,25 +3,47 @@
  * http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/examples/speed_test_example.html?compiled
  */
 
-function elem(element) {
-  return document.getElementById(element);
-}
-
 var ff = {};
-var data = { count: null, fountains: [], searchPos: {} };
 var vancouverLat = 49.26123;
 var vancouverLng = -123.11393;
 
+ff.data = { count: null, fountains: [], searchPos: {}, searchResultHTML: ''};
 ff.fountains = {};
 ff.map = null;
 ff.markerClusterer = null;
 ff.markers = [];
 ff.infoWindow = null;
 
+function elem(element) {
+  return document.getElementById(element);
+}
+
+function localStorageSupport() {
+  try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
+}
+
+ff.restoreData = function() {
+  if (localStorageSupport()) {
+    ff.data = JSON.parse(localStorage.getItem('fountains_data')) || ff.data;
+  }
+}
+
+ff.setData = function(value) {
+  if (localStorageSupport()) {
+    localStorage.setItem('fountains_data', JSON.stringify(value));
+  }
+  ff.data = value;
+}
+
 ff.init = function() {
-  var latlng = new google.maps.LatLng(data.searchPos.lat || vancouverLat, data.searchPos.lng || vancouverLng);
+  ff.restoreData();
+  var latlng = new google.maps.LatLng(ff.data.searchPos.lat || vancouverLat, ff.data.searchPos.lng || vancouverLng);
   var options = {
-    'zoom': data.zoom || 12,
+    'zoom': ff.data.zoom || 12,
     'center': latlng,
     'mapTypeId': google.maps.MapTypeId.ROADMAP
   };
@@ -42,13 +64,15 @@ ff.showMarkers = function() {
     ff.markerClusterer.clearMarkers();
   }
 
-  ff.fountains = data.fountains;
+  ff.fountains = ff.data.fountains;
 
   var panel = elem('markerlist');
 
-  if (data.count !== null) {
+  // Display the list after a search (i.e, ff.data.count can be 0)
+  if (ff.data.count !== null) {
     panel.innerHTML = '<a class="list-group-item text-center">' +
       '<span class="badge">' + ff.fountains.length + '</span><strong>Fountains</strong></a>';
+    elem('search-result').innerHTML = ff.data.searchResultHTML || '';
   } else {
     panel.innerHTML = '';
   }
@@ -56,7 +80,7 @@ ff.showMarkers = function() {
   var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=' +
   'FFFFFF,008CFF,000000&ext=.png';
 
-  for (var i = 0; i < data.count; i++) {
+  for (var i = 0; i < ff.data.count; i++) {
     var fountain = ff.fountains[i];
     var titleText = fountain.name;
     if (titleText == '') {
@@ -90,20 +114,20 @@ ff.showMarkers = function() {
 
   // If the user searches based on a particular address,
   // show this address with a different marker
-  if (data.searchPos && data.searchPos.lat && data.searchPos.lng) {
+  if (ff.data.searchPos && ff.data.searchPos.lat && ff.data.searchPos.lng) {
 
     var imageUrl = 'http://maps.google.com/mapfiles/marker.png';
     var markerImage = new google.maps.MarkerImage(imageUrl,
         new google.maps.Size(24, 32));
 
-    var latLng = new google.maps.LatLng(data.searchPos.lat, data.searchPos.lng);
+    var latLng = new google.maps.LatLng(ff.data.searchPos.lat, ff.data.searchPos.lng);
     var marker = new google.maps.Marker({
       position: latLng,
       map: ff.map,
       animation: google.maps.Animation.BOUNCE
     });
 
-    var fn = ff.markerClickFunction(data.searchPos, latLng);
+    var fn = ff.markerClickFunction(ff.data.searchPos, latLng);
     google.maps.event.addListener(marker, 'click', fn);
     google.maps.event.addDomListener(elem('search-result'), 'click', fn);
   }
@@ -149,7 +173,7 @@ ff.findAll = function() {
   ff.clear();
   $.get('/api/all', {})
     .done(function(fountains) {
-      data = fountains;
+      ff.setData(fountains);
       ff.init();
     });
 };
