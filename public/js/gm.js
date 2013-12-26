@@ -128,6 +128,8 @@ ff.markerClickFunction = function(fountain, latlng) {
     ff.infoWindow.setContent(infoHtml);
     ff.infoWindow.setPosition(latlng);
     ff.infoWindow.open(ff.map);
+    // Some y-offset for the info window arrow head
+    ff.infoWindow.setOptions({ pixelOffset : new google.maps.Size(0, -17, 'px', 'px') })
     location.href = "#map";
   };
 };
