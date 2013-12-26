@@ -46,6 +46,10 @@ html, body {
   padding-right: 0;
 }
 
+#ml-search-form-group {
+  padding-top: 10px;
+}
+
 /**********************
  * Override BootStrap
 ***********************/

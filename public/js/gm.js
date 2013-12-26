@@ -68,12 +68,17 @@ ff.showMarkers = function() {
 
   var panel = elem('markerlist');
 
-  // Display the list after a search (i.e, ff.data.count can be 0)
+  // Display the list after a search (ff.data.count can be 0)
   if (ff.data.count !== null) {
     panel.innerHTML = '<a class="list-group-item text-center">' +
       '<span class="badge">' + ff.fountains.length + '</span><strong>Fountains</strong></a>';
+    // Search address
     elem('search-result').innerHTML = ff.data.searchResultHTML || '';
-  } else {
+    // Search bar
+    if (ff.data.count > 0) elem('ml-search-form-group').classList.remove('hidden')
+    else elem('ml-search-form-group').className += ' hidden';
+  }
+  else {
     panel.innerHTML = '';
   }
 

@@ -1,5 +1,5 @@
 doctype html
-html
+html(ng-app="fountain")
   head
     meta(name="viewport", content="initial-scale=1.0, width=device-width")
     title= title
@@ -21,7 +21,7 @@ html
           a.navbar-brand(href="/")
             strong Vancouver Fountain Finder
 
-    div#wrap
+    div#wrap(ng-controller="MainCtrl")
       block content
 
     div#footer(role="contentinfo")
@@ -42,5 +42,6 @@ html
       | $(window).resize(function () {
       |   $('#map').css('height', $(window).height());
       | }).resize();
-    script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js")
+    script(src="/js/bootstrap-3.0.3-modal.min.js")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js")
 

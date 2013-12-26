@@ -10,7 +10,9 @@ block content
           h4.modal-title#searchModalLabel We found these addresses
         div.modal-body
           p.lead Please select one:
-          div.list-group
+          div.form-group
+            input.form-control(type="text", placeholder="Type to search", ng-model="addresses")
+          div.list-group(ng-filter="addresses")
 
   div.row
     div#panel.col-md-4
@@ -24,7 +26,7 @@ block content
             div.form-group
               label(for="search-input") Search
               div.input-group
-                input#search-input.form-control(type="text", name="location", placeholder="Downtown")
+                input#search-input.form-control(type="text", name="location", placeholder="Downtown", autofocus="autofocus")
                 span.input-group-addon
                   small.hidden-xs.hidden-sm Vancouver, BC
                   small.visible-xs.visible-sm.hidden-print Van, BC
@@ -38,7 +40,9 @@ block content
               button#find-all.btn.btn-primary(type="button", style="margin-left: 10px") Find All
 
           div#search-result
-          div#markerlist.list-group
+          div#ml-search-form-group.form-group.hidden
+            input#ml-search-input.form-control(type="text", placeholder="Type to search", ng-model="markers")
+          div#markerlist.list-group(ng-filter="markers")
 
     div.col-md-8
       div#map
