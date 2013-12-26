@@ -23,7 +23,6 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(error);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded());
@@ -42,25 +41,17 @@ app.post('/api/geom', api.geom);
 // Query for nearby fountains
 app.get('/api/nearby/:lat/:lng', api.search);
 
-// Error-handling middleware
-function error(err, req, res, next) {
+// non-error-handling middleware
+app.use(function(req, res, next){
+  res.status(404);
+  res.render('404', { title: 'Page not found' });
+});
+
+// error-handling middleware
+app.use(function(err, req, res, next){
   res.status(err.status || 500);
-
-  // respond with html page
-  if (req.accepts('html')) {
-    res.render('404', { title: '404' });
-    return;
-  }
-
-  // respond with json
-  if (req.accepts('json')) {
-    res.send({ error: 'Not found' });
-    return;
-  }
-
-  // default to plain-text. send()
-  res.type('txt').send('Not found');
-}
+  res.render('404', { title: err });
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
