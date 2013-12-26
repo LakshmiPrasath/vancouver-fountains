@@ -53,3 +53,7 @@ html, body {
   margin-left: 0;
   margin-right: 0;
 }
+
+.modal {
+  z-index: 10000;
+}
