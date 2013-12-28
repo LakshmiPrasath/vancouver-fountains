@@ -40,6 +40,14 @@ app.get('/api/all', api.getFountains);
 app.post('/api/geom', api.geom);
 // Query for nearby fountains
 app.get('/api/nearby/:lat/:lng', api.search);
+// Disclaimer
+app.get('/disclaimer', function(req, res) {
+  res.render('disclaimer', { title: 'Disclaimer | Vancouver Fountain Finder' });
+});
+// Privacy
+app.get('/privacy', function(req, res) {
+  res.render('privacy', { title: 'Privacy | Vancouver Fountain Finder' });
+});
 
 // non-error-handling middleware
 app.use(function(req, res, next){
