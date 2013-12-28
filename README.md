@@ -1,7 +1,9 @@
 Vancouver Fountain Finder
 ===================
 Find a drinking fountain in Vancouver, BC  
-Data provided by the [City of Vancouver](http://data.vancouver.ca/datacatalogue/drinkingFountains.htm)
+Data (`drinkingFountains.csv`) provided by the [City of Vancouver](http://data.vancouver.ca/datacatalogue/drinkingFountains.htm) ([terms](http://vancouver.ca/your-government/terms-of-use.aspx))
+
+The database was imported from the csv file. The names of the fountains were truncated so that they are more user friendly.  
 
 Usage:
 ------
