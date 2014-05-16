@@ -45,7 +45,8 @@ ff.init = function() {
   var options = {
     'zoom': ff.data.zoom || 12,
     'center': latlng,
-    'mapTypeId': google.maps.MapTypeId.ROADMAP
+    'mapTypeId': google.maps.MapTypeId.ROADMAP,
+    'scrollwheel': false
   };
 
   ff.map = new google.maps.Map(elem('map'), options);
