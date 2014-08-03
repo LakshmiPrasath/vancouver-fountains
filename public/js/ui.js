@@ -9,7 +9,7 @@ $(document).ready(function() {
   var $modalList = $modal.find('.list-group');
 
   /********************************************************
-   *	    Form submit - searching for fountains
+   * Form submit - searching for fountains
    ********************************************************/
   $("form#search-form").submit(function(e) {
     e.preventDefault();
@@ -89,13 +89,13 @@ $(document).ready(function() {
     var html = '';
     if (selected === 1) {
       html = '<strong>Selected address: </strong>'
-	      + '<img src="http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=0.7"/>'
-	      + '<a> ' + address + '</a>'
+        + '<img src="http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=0.7"/>'
+        + '<a> ' + address + '</a>'
     }
     else {
       html = '<strong>Found address: </strong>'
-	      + '<img src="http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=0.7"/>'
-	      + '<a> ' + address + '</a>'
+        + '<img src="http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=0.7"/>'
+        + '<a> ' + address + '</a>'
     }
 
     // Save this so we can display it if refreshed
@@ -120,7 +120,7 @@ $(document).ready(function() {
 
 
   /********************************************************
-   *		  Search functionalities
+   * Search functionalities
    ********************************************************/
 
   // Use angularjs for text filtering
@@ -133,11 +133,11 @@ $(document).ready(function() {
   app.directive('ngFilter', function() {
     return {
       link: function(scope, element, attr) {
-	scope.$watch(attr.ngFilter, function(q){
-	  $(element).children().each(function(i,a){
-	    $(a).toggle((new RegExp(q.toLowerCase())).test($(a).text().toLowerCase()));
-	  });
-	});
+        scope.$watch(attr.ngFilter, function(q){
+          $(element).children().each(function(i,a){
+            $(a).toggle((new RegExp(q.toLowerCase())).test($(a).text().toLowerCase()));
+          });
+        });
       }
     };
   });
